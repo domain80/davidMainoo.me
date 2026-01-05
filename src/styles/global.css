@@ -1,0 +1,55 @@
+/* Font imports - must be first */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap');
+@import url('https://unpkg.com/@github/hubot-sans@1.0.0/hubot-sans.css');
+
+@import "tailwindcss";
+
+@theme {
+  /* Custom font families */
+  --font-heading: 'Bricolage Grotesque', sans-serif;
+  --font-sans: 'Hubot Sans', 'Inter', system-ui, sans-serif;
+  --font-mono: 'Cascadia Code', 'Source Code Pro', monospace;
+
+  /* Custom colors */
+  --color-accent: #ff6b9d;
+  --color-accent-light: #ffb3d1;
+  --color-accent-dark: #e85580;
+}
+
+@layer base {
+  :root {
+    /* Light mode colors */
+    --color-bg-primary: 255 255 255;
+    --color-bg-secondary: 249 250 251;
+    --color-text-primary: 26 26 26;
+    --color-text-secondary: 107 114 128;
+    --color-border: 229 231 235;
+  }
+
+  .dark {
+    /* Dark mode colors */
+    --color-bg-primary: 17 24 39;
+    --color-bg-secondary: 31 41 55;
+    --color-text-primary: 243 244 246;
+    --color-text-secondary: 156 163 175;
+    --color-border: 55 65 81;
+  }
+
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    @apply text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-900;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+}
