@@ -18,45 +18,47 @@
   </span>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('theme-toggle');
-    const dot = document.getElementById('theme-toggle-dot');
-    const label = document.getElementById('theme-label');
+<script is:inline>
+  (function() {
+    function initThemeToggle() {
+      const toggle = document.getElementById('theme-toggle');
+      const dot = document.getElementById('theme-toggle-dot');
+      const label = document.getElementById('theme-label');
 
-    function updateUI() {
-      const isDark = document.documentElement.classList.contains('dark');
+      if (!toggle || !dot || !label) {
+        console.error('Theme toggle elements not found');
+        return;
+      }
 
-      // Update label
-      if (label) {
+      function updateUI() {
+        const isDark = document.documentElement.classList.contains('dark');
         label.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+        dot.style.transform = isDark ? 'translateX(24px)' : 'translateX(0)';
       }
 
-      // Update dot position
-      if (dot) {
+      toggle.addEventListener('click', function() {
+        const isDark = document.documentElement.classList.contains('dark');
+
         if (isDark) {
-          dot.style.transform = 'translateX(24px)';
+          document.documentElement.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
         } else {
-          dot.style.transform = 'translateX(0)';
+          document.documentElement.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
         }
-      }
+
+        updateUI();
+      });
+
+      // Initialize on page load
+      updateUI();
     }
 
-    toggle?.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.contains('dark');
-
-      if (isDark) {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      }
-
-      updateUI();
-    });
-
-    // Initialize on page load
-    updateUI();
-  });
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initThemeToggle);
+    } else {
+      initThemeToggle();
+    }
+  })();
 </script>
