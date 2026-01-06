@@ -1,14 +1,18 @@
 ---
-// Theme toggle component using DaisyUI toggle
+// Theme toggle switch component with proper boolean checkbox
 ---
 
 <div class="flex items-center gap-3">
-  <input
-    type="checkbox"
-    id="theme-toggle"
-    class="toggle toggle-accent"
-    aria-label="Toggle dark mode"
-  />
+  <label class="relative inline-flex items-center cursor-pointer">
+    <input
+      type="checkbox"
+      id="theme-toggle"
+      class="sr-only peer"
+      aria-label="Toggle dark mode"
+    />
+    <div class="w-11 h-6 bg-gray-300 dark:bg-gray-600 rounded-full peer peer-focus:ring-2 peer-focus:ring-accent peer-focus:ring-offset-2 after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent peer-checked:after:translate-x-full peer-checked:after:border-white">
+    </div>
+  </label>
   <span id="theme-label" class="text-sm text-gray-600 dark:text-gray-400">
     Light Mode
   </span>
