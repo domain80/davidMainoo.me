@@ -1,10 +1,10 @@
 ---
 import ThemeToggle from "../ui/ThemeToggle.astro";
 import Button from "../ui/Button.astro";
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 ---
 
-<div class="space-y-6">
+<div class="space-y-6 mt-8">
   <!-- Theme Toggle -->
   <ThemeToggle />
 
@@ -22,7 +22,9 @@ import { Icon } from 'astro-icon/components';
   <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
     It is no surprise that the AI age has mode us rediscover and realign with
     why we do what we do as software engineers giving us an opportunity to grow
-    and evolve. Hi there and what a time to be alive.
+    and evolve.
+    <br />
+    Hi there and what a time to be alive.
   </p>
 
   <!-- CTA Buttons -->
@@ -85,14 +87,19 @@ import { Icon } from 'astro-icon/components';
             );
             if (activeLink) {
               activeLink.classList.add("text-accent", "font-semibold");
-              activeLink.classList.remove("text-gray-700", "dark:text-gray-300");
+              activeLink.classList.remove(
+                "text-gray-700",
+                "dark:text-gray-300"
+              );
             }
           }
         });
       }, observerOptions);
 
       // Observe all sections
-      const sections = document.querySelectorAll("#whats-on-my-mind, #projects");
+      const sections = document.querySelectorAll(
+        "#whats-on-my-mind, #projects"
+      );
       sections.forEach((section) => observer.observe(section));
 
       // Smooth scroll on click

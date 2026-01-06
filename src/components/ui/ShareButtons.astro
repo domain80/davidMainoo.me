@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 
 interface Props {
   title: string;
@@ -11,7 +11,7 @@ const encodedUrl = encodeURIComponent(url);
 const encodedTitle = encodeURIComponent(title);
 ---
 
-<div class="flex items-center gap-4">
+<div class="flex items-center justify-between gap-4">
   <!-- Like counter placeholder (will be enhanced later) -->
   <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
     <Icon name="tabler:heart" class="w-5 h-5" />
@@ -37,25 +37,25 @@ const encodedTitle = encodeURIComponent(title);
 </div>
 
 <script>
-  const shareButton = document.getElementById('share-button');
+  const shareButton = document.getElementById("share-button");
 
-  shareButton?.addEventListener('click', async () => {
-    const title = shareButton.getAttribute('data-title') || '';
-    const url = shareButton.getAttribute('data-url') || window.location.href;
+  shareButton?.addEventListener("click", async () => {
+    const title = shareButton.getAttribute("data-title") || "";
+    const url = shareButton.getAttribute("data-url") || window.location.href;
 
     if (navigator.share) {
       try {
         await navigator.share({ title, url });
       } catch (err) {
-        console.error('Share failed:', err);
+        console.error("Share failed:", err);
       }
     } else {
       // Fallback: Copy to clipboard
       try {
         await navigator.clipboard.writeText(url);
-        alert('Link copied to clipboard!');
+        alert("Link copied to clipboard!");
       } catch (err) {
-        console.error('Copy failed:', err);
+        console.error("Copy failed:", err);
       }
     }
   });
