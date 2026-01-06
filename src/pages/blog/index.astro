@@ -1,0 +1,303 @@
+---
+import { getCollection } from "astro:content";
+import HomeLayout from "../../layouts/HomeLayout.astro";
+import BlogSidebar from "../../components/blog/BlogSidebar.astro";
+import BlogCard from "../../components/blog/BlogCard.astro";
+
+// Fetch all non-draft posts
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+// Sort by date (newest first)
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Extract unique tags with counts
+const tagMap = new Map<string, number>();
+sortedPosts.forEach((post) => {
+  post.data.tags.forEach((tag) => {
+    tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+  });
+});
+
+const allTags = Array.from(tagMap.entries())
+  .map(([tag, count]) => ({ tag, count }))
+  .sort((a, b) => b.count - a.count); // Sort by popularity
+
+const POSTS_PER_PAGE = 12;
+const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
+
+// Serialize posts for client-side filtering
+const postsData = sortedPosts.map((post) => ({
+  id: post.id,
+  title: post.data.title,
+  description: post.data.description,
+  tags: post.data.tags,
+}));
+---
+
+<HomeLayout title="All Posts">
+  <BlogSidebar
+    slot="sidebar"
+    allTags={allTags}
+    totalPosts={sortedPosts.length}
+  />
+
+  <div>
+    <!-- Posts List -->
+    <div id="posts-grid" class="space-y-4 mt-30">
+      {
+        sortedPosts
+          .slice(0, POSTS_PER_PAGE)
+          .map((post) => (
+            <BlogCard
+              title={post.data.title}
+              description={post.data.description}
+              slug={post.id}
+            />
+          ))
+      }
+    </div>
+
+    <!-- No Results Message (hidden by default) -->
+    <div id="no-results" class="hidden text-center py-12">
+      <p class="text-gray-600 dark:text-gray-400">
+        No posts found. Try adjusting your filters or search query.
+      </p>
+    </div>
+  </div>
+
+  <script define:vars={{ postsData, POSTS_PER_PAGE }}>
+    (function () {
+      let allPosts = postsData;
+      let filteredPosts = allPosts;
+      let currentPage = 1;
+      let activeTag = null;
+      let searchQuery = "";
+
+      function initFilters() {
+        // Parse URL params
+        const params = new URLSearchParams(window.location.search);
+        currentPage = parseInt(params.get("page") || "1");
+        activeTag = params.get("tag") || null;
+        searchQuery = params.get("search") || "";
+
+        // Set initial UI state
+        const searchInput = document.getElementById("blog-search");
+        if (searchInput && searchQuery) {
+          searchInput.value = searchQuery;
+        }
+
+        // Add event listeners
+        if (searchInput) {
+          searchInput.addEventListener("input", (e) => {
+            searchQuery = e.target.value.toLowerCase();
+            currentPage = 1;
+            applyFilters();
+          });
+        }
+
+        // Tag click handlers (delegated)
+        const tagList = document.getElementById("tag-list");
+        if (tagList) {
+          tagList.addEventListener("click", (e) => {
+            const tagBtn = e.target.closest("[data-tag]");
+            if (tagBtn) {
+              const tag = tagBtn.dataset.tag;
+              activeTag = activeTag === tag ? null : tag;
+              currentPage = 1;
+              applyFilters();
+            }
+          });
+        }
+
+        // Pagination handlers
+        const prevBtn = document.getElementById("prev-page");
+        const nextBtn = document.getElementById("next-page");
+
+        if (prevBtn) {
+          prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+              currentPage--;
+              applyFilters();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          });
+        }
+
+        if (nextBtn) {
+          nextBtn.addEventListener("click", () => {
+            const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+            if (currentPage < totalPages) {
+              currentPage++;
+              applyFilters();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          });
+        }
+
+        applyFilters();
+      }
+
+      function applyFilters() {
+        // Filter by search
+        filteredPosts = allPosts.filter((post) => {
+          const matchesSearch =
+            !searchQuery ||
+            post.title.toLowerCase().includes(searchQuery) ||
+            post.description.toLowerCase().includes(searchQuery);
+
+          const matchesTag = !activeTag || post.tags.includes(activeTag);
+
+          return matchesSearch && matchesTag;
+        });
+
+        // Update URL without reload
+        const params = new URLSearchParams();
+        if (currentPage > 1) params.set("page", currentPage.toString());
+        if (activeTag) params.set("tag", activeTag);
+        if (searchQuery) params.set("search", searchQuery);
+
+        const newUrl = params.toString()
+          ? `${window.location.pathname}?${params.toString()}`
+          : window.location.pathname;
+
+        window.history.replaceState({}, "", newUrl);
+
+        renderPosts();
+        updatePagination();
+        updateActiveFilters();
+        updateTagButtons();
+      }
+
+      function renderPosts() {
+        const grid = document.getElementById("posts-grid");
+        const noResults = document.getElementById("no-results");
+
+        if (!grid || !noResults) return;
+
+        if (filteredPosts.length === 0) {
+          grid.classList.add("hidden");
+          noResults.classList.remove("hidden");
+          return;
+        }
+
+        grid.classList.remove("hidden");
+        noResults.classList.add("hidden");
+
+        const start = (currentPage - 1) * POSTS_PER_PAGE;
+        const end = start + POSTS_PER_PAGE;
+        const postsToShow = filteredPosts.slice(start, end);
+
+        grid.innerHTML = postsToShow
+          .map(
+            (post) => `
+          <article class="group">
+            <a href="/blog/${post.id}" class="block space-y-2 p-4 rounded-lg border border-gray-200/60 dark:border-gray-700/60 backdrop-blur-sm bg-white/50 dark:bg-gray-900/50 hover:border-accent/50 dark:hover:border-accent/50 transition-all duration-200">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-accent dark:group-hover:text-accent transition-colors">
+                ${post.title}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                ${post.description}
+              </p>
+            </a>
+          </article>
+        `
+          )
+          .join("");
+      }
+
+      function updatePagination() {
+        const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+        const prevBtn = document.getElementById("prev-page");
+        const nextBtn = document.getElementById("next-page");
+        const pageNumbersEl = document.getElementById("page-numbers");
+
+        if (prevBtn) {
+          prevBtn.disabled = currentPage === 1;
+        }
+
+        if (nextBtn) {
+          nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+        }
+
+        // Render page numbers
+        if (pageNumbersEl && totalPages > 1) {
+          const pages = [];
+          const maxVisible = 7;
+          let startPage = Math.max(1, currentPage - 3);
+          let endPage = Math.min(totalPages, currentPage + 3);
+
+          // Adjust if we're near the beginning or end
+          if (endPage - startPage < maxVisible - 1) {
+            if (startPage === 1) {
+              endPage = Math.min(totalPages, startPage + maxVisible - 1);
+            } else {
+              startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+          }
+
+          for (let i = startPage; i <= endPage; i++) {
+            const isActive = i === currentPage;
+            pages.push(`
+              <button
+                type="button"
+                data-page="${i}"
+                class="px-3 py-2 text-sm rounded-lg border ${
+                  isActive
+                    ? "bg-accent text-white border-accent"
+                    : "border-gray-200/60 dark:border-gray-700/60 bg-white/50 dark:bg-gray-900/50 text-gray-700 dark:text-gray-300 hover:border-accent/50"
+                } transition-colors"
+              >
+                ${i}
+              </button>
+            `);
+          }
+
+          pageNumbersEl.innerHTML = pages.join("");
+
+          // Add click handlers to page number buttons
+          pageNumbersEl.querySelectorAll("[data-page]").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const page = parseInt(e.target.dataset.page);
+              if (page && page !== currentPage) {
+                currentPage = page;
+                applyFilters();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            });
+          });
+        }
+      }
+
+      function updateActiveFilters() {
+        const activeFiltersEl = document.getElementById("active-filters");
+        if (!activeFiltersEl) return;
+
+        const count = filteredPosts.length;
+
+        let text = `Showing ${count} post${count !== 1 ? "s" : ""}`;
+        if (searchQuery) text += ` matching "${searchQuery}"`;
+        if (activeTag) text += ` tagged with "${activeTag}"`;
+
+        activeFiltersEl.textContent = text;
+      }
+
+      function updateTagButtons() {
+        // Update data-active attribute on tag buttons
+        document.querySelectorAll("[data-tag]").forEach((btn) => {
+          btn.setAttribute(
+            "data-active",
+            btn.dataset.tag === activeTag ? "true" : "false"
+          );
+        });
+      }
+
+      // Initialize on page load
+      initFilters();
+
+      // Re-initialize after Astro view transitions
+      document.addEventListener("astro:after-swap", initFilters);
+    })();
+  </script>
+</HomeLayout>

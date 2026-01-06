@@ -13,7 +13,9 @@ interface Props {
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-12">
         <!-- Left Sidebar -->
         <aside class="lg:sticky lg:top-12 lg:h-fit">
-          <Sidebar />
+          <slot name="sidebar">
+            <Sidebar />
+          </slot>
         </aside>
 
         <!-- Right Content -->
