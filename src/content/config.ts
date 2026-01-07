@@ -35,6 +35,7 @@ const projects = defineCollection({
     status: z.string(), // Changed from enum to string for flexibility
     tags: z.array(z.string()),
     link: z.string().url().optional(),
+    linkText: z.string().optional(),
     github: z.string().url().optional(),
     featured: z.boolean().default(false),
     order: z.number().optional(),

@@ -3,8 +3,9 @@ title: "Centabit"
 description: "A powerfully simple budget app designed for speed and usability, perfect for one-handed use when you are on the go."
 year: "2025"
 status: "Ongoing"
-tags: ["Vue", "Giging", "Freegeble", "Flutter", "Typescript"]
-link: "https://centabit.example.com"
+tags: ["Flutter", "Golang", "SQLite"]
+link: "https://tally.so/r/eqQo4k"
+linkText: "Join the free waitlist today!"
 featured: true
 order: 1
 ---
@@ -15,4 +16,4 @@ A powerfully simple budget app designed for speed and usability, perfect for one
 
 As a developer dedicated to delivering complete solutions, I chose Flutter and built this app five times to master its architecture and tools.
 
-I use it personally, and I think it is a fantastic utility for everyone.
+I use it personally, and it's a fantastic utility for everyone.

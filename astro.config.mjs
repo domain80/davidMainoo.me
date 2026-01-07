@@ -5,7 +5,7 @@ import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://davidmainoo.me',
+  site: 'https://domain80.netlify.app',
   integrations: [icon()],
   vite: {
     plugins: [tailwindcss()],

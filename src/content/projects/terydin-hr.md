@@ -1,11 +1,12 @@
 ---
 title: "Terydin HR"
 description: "Paired with a small yet powerful team of fantastic individuals, we have created what is now Terydin HRMS - a platform for connecting employers with a very particular niche to talent across Africa."
-year: "2025"
+year: "2024"
 endYear: "Present"
 status: "Ongoing"
-tags: ["Vue", "Giing", "Freegeble", "Flutter", "Typescript"]
-link: "https://terydin.example.com"
+tags: ["Flutter", "React", "Typescript", "Java", "SpringBoot", "PostgreSQL"]
+link: "https://terydin.co"
+linkText: "Visit Terydin →"
 featured: true
 order: 2
 ---
@@ -14,4 +15,4 @@ order: 2
 
 Paired with a small yet powerful team of fantastic individuals, we have created what is now Terydin HRMS - a platform for connecting employers with a very particular niche to talent across Africa.
 
-Today, you too can join the community or view our value proposition.
+Today, you too can **join the community** or view our **value proposition**.

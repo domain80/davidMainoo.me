@@ -10,8 +10,8 @@ interface Props {
 
 const {
   title,
-  description = "Software Engineer building modern web applications",
-  image,
+  description = "Shipping polished digital experiences with agility",
+  image = "/og-image.svg", // TODO: Replace with custom branded image
 } = Astro.props;
 const siteTitle = `${title} | David Mainoo`;
 ---
@@ -34,7 +34,7 @@ const siteTitle = `${title} | David Mainoo`;
     <!-- Open Graph -->
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={description} />
-    {image && <meta property="og:image" content={image} />}
+    <meta property="og:image" content={image} />
     <meta property="og:type" content="website" />
 
     <!-- View Transitions -->

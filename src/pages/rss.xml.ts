@@ -11,8 +11,8 @@ export async function GET(context: APIContext) {
 
   return rss({
     title: 'David Mainoo | Blog',
-    description: 'Software Engineer building modern web applications',
-    site: context.site ?? 'https://davidmainoo.me',
+    description: 'Shipping polished digital experiences with agility',
+    site: context.site ?? 'https://domain80.netlify.app',
     items: publishedPosts.map(post => ({
       title: post.data.title,
       description: post.data.description,

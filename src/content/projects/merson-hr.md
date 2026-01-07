@@ -3,8 +3,10 @@ title: "Merson HR"
 description: "At Merson Venture Studios, we developed a centralized HR and payroll platform that streamlines employee records and payroll, replacing manual spreadsheets."
 year: "2024"
 status: "Completed"
-tags: ["Vue", "Giing", "Freegeble", "Flutter", "Typescript"]
-featured: false
+tags: ["React", "Typescript", "Node.js", "GraphQL", "MongoDB"]
+link: "https://mersonhr.com/"
+linkText: "Visit Merson HR →"
+featured: true
 order: 3
 ---
 

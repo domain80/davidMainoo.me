@@ -9,10 +9,11 @@ interface Props {
   endYear?: string;
   tags: string[];
   link?: string;
+  linkText?: string;
   slug: string;
 }
 
-const { title, description, year, endYear, tags, link, slug } = Astro.props;
+const { title, description, year, endYear, tags, link, linkText, slug } = Astro.props;
 const yearRange = endYear ? `${year} - ${endYear}` : year;
 ---
 
@@ -50,7 +51,7 @@ const yearRange = endYear ? `${year} - ${endYear}` : year;
         rel="noopener noreferrer"
         class="inline-flex items-center gap-1 text-sm text-accent hover:text-accent-dark transition-colors"
       >
-        <span>Join the free waitlist today!</span>
+        <span>{linkText || 'View project →'}</span>
         <Icon name="tabler:external-link" class="w-4 h-4" />
       </a>
     )}

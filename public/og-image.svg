@@ -1,0 +1,35 @@
+<!-- TODO: Replace with custom Open Graph image (1200x630px recommended) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d97706;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b45309;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#grad)"/>
+
+  <!-- Name -->
+  <text
+    x="600"
+    y="280"
+    font-family="system-ui, -apple-system, sans-serif"
+    font-size="72"
+    font-weight="700"
+    fill="#ffffff"
+    text-anchor="middle"
+  >David Mainoo</text>
+
+  <!-- Tagline -->
+  <text
+    x="600"
+    y="360"
+    font-family="system-ui, -apple-system, sans-serif"
+    font-size="32"
+    font-weight="400"
+    fill="#ffffff"
+    opacity="0.9"
+    text-anchor="middle"
+  >Shipping polished digital experiences with agility</text>
+</svg>
